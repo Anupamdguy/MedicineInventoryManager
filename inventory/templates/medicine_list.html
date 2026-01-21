@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicines - Inventory Manager</title>
+    <link rel="stylesheet" href="{% static 'inventory/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 Medicine Management</h1>
+            <nav class="nav-menu">
+                <a href="{% url 'index' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'medicine_list' %}" class="nav-link active">Medicines</a>
+                <a href="{% url 'batch_list' %}" class="nav-link">Batches</a>
+                <a href="{% url 'supplier_list' %}" class="nav-link">Suppliers</a>
+            </nav>
+        </header>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="medicines-section">
+            <div class="section-header">
+                <h2 class="section-title">All Medicines ({{ total }})</h2>
+                <a href="{% url 'medicine_add' %}" class="btn btn-primary">+ Add Medicine</a>
+            </div>
+
+            {% if medicines %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>SKU</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicine in medicines %}
+                    <tr>
+                        <td><strong>{{ medicine.name }}</strong></td>
+                        <td>{{ medicine.sku }}</td>
+                        <td><span class="badge">{{ medicine.category }}</span></td>
+                        <td>{{ medicine.description|truncatewords:10 }}</td>
+                        <td class="actions">
+                            <a href="{% url 'medicine_edit' medicine.pk %}" class="btn btn-small btn-edit">Edit</a>
+                            <a href="{% url 'medicine_delete' medicine.pk %}" class="btn btn-small btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">
+                <p>No medicines found.</p>
+                <a href="{% url 'medicine_add' %}" class="btn btn-primary">Add First Medicine</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

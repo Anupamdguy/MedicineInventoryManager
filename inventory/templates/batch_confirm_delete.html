@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Batch - Inventory Manager</title>
+    <link rel="stylesheet" href="{% static 'inventory/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Delete Batch</h1>
+            <nav class="nav-menu">
+                <a href="{% url 'index' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'medicine_list' %}" class="nav-link">Medicines</a>
+                <a href="{% url 'batch_list' %}" class="nav-link active">Batches</a>
+                <a href="{% url 'supplier_list' %}" class="nav-link">Suppliers</a>
+            </nav>
+        </header>
+
+        <div class="form-container">
+            <div class="alert alert-warning">
+                <h3>⚠️ Are you sure?</h3>
+                <p>Do you really want to delete batch <strong>{{ batch.batch_no }}</strong> for {{ batch.medicine_name.name }}?</p>
+                <p><strong>Details:</strong></p>
+                <ul>
+                    <li>Quantity: {{ batch.quantity }} {{ batch.unit }}</li>
+                    <li>Expiry Date: {{ batch.expiry_date }}</li>
+                    <li>Supplier: {{ batch.supplier_name.name }}</li>
+                </ul>
+                <p>This action cannot be undone!</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <a href="{% url 'batch_list' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

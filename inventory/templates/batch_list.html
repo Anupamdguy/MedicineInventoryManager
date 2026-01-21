@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batches - Inventory Manager</title>
+    <link rel="stylesheet" href="{% static 'inventory/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Batch Management</h1>
+            <nav class="nav-menu">
+                <a href="{% url 'index' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'medicine_list' %}" class="nav-link">Medicines</a>
+                <a href="{% url 'batch_list' %}" class="nav-link active">Batches</a>
+                <a href="{% url 'supplier_list' %}" class="nav-link">Suppliers</a>
+            </nav>
+        </header>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="medicines-section">
+            <div class="section-header">
+                <h2 class="section-title">All Batches ({{ total }})</h2>
+                <a href="{% url 'batch_add' %}" class="btn btn-primary">+ Add Batch</a>
+            </div>
+
+            {% if batches %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Batch No</th>
+                        <th>Quantity</th>
+                        <th>Expiry Date</th>
+                        <th>Price</th>
+                        <th>Supplier</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for batch in batches %}
+                    <tr>
+                        <td><strong>{{ batch.medicine_name.name }}</strong></td>
+                        <td>{{ batch.batch_no }}</td>
+                        <td>{{ batch.quantity }} {{ batch.unit }}</td>
+                        <td>{{ batch.expiry_date }}</td>
+                        <td>${{ batch.purchase_price }}</td>
+                        <td>{{ batch.supplier_name.name }}</td>
+                        <td class="actions">
+                            <a href="{% url 'batch_edit' batch.pk %}" class="btn btn-small btn-edit">Edit</a>
+                            <a href="{% url 'batch_delete' batch.pk %}" class="btn btn-small btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">
+                <p>No batches found.</p>
+                <a href="{% url 'batch_add' %}" class="btn btn-primary">Add First Batch</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
